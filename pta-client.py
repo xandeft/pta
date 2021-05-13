@@ -64,7 +64,6 @@ def test2(sckt):
   cnt += 1
   data, addr = sckt.recvfrom(2048)
   data = data.decode()
-  print(data)
   mess = data.strip("\n").split(" ")
   if len(mess) != 2:
     return -2
@@ -89,28 +88,27 @@ def test3(sckt):
     data, addr = sckt.recvfrom(2048)
     data = data.decode()
     if commandUnknow:
-        try:
-            commandUnknow = False
-            splitteddata = data.split(" ")
-            if splitteddata[1] == "ARQS":
-                filesTotal = int(splitteddata[2])
-                fileCnt += len(data.split(",")) 
-        except Exception as e:
-          print(e)
-          excep = True
-          break
+      try:
+          commandUnknow = False
+          splitteddata = data.split(" ")
+          if splitteddata[1] == "ARQS":
+              filesTotal = int(splitteddata[2])
+              fileCnt += len(data.split(","))
+      except Exception as e:
+        print(e)
+        excep = True
+        break
     else:
-        fileCnt += len(data.split(","))
+      fileCnt += len(data.split(","))
     data1 += data
     if fileCnt >= filesTotal:
-        break
-
+      break
   if not excep:
-    print(data1)
     files = data1.split(",")
     firstFile = files[0].split(" ",3)
     files[0] = firstFile[3]
     mess = data1.split(" ")
+    
   else:
     return (-2,"")
   
@@ -181,12 +179,12 @@ def test4(sckt,arq,bad):
     return -2
 
 if __name__ == "__main__":
-  if len(sys.argv) <= 3:
+  """if len(sys.argv) <= 3:
     print("Usage: pta-client.py <server-ip> <server-port> <user>")
-    sys.exit(2)
-  serverIp = sys.argv[1]
-  serverPort = int(sys.argv[2])
-  user = sys.argv[3]
+    sys.exit(2)"""
+  serverIp = '127.0.0.1' #sys.argv[1]
+  serverPort = 12000 #int(sys.argv[2])
+  user = 'user1'#sys.argv[3]
 
   points = 0
 
@@ -209,6 +207,7 @@ if __name__ == "__main__":
   cSocket = connection(serverIp,serverPort)
   points += test1(cSocket,user,0)
   print("Points: %d/6" % points)
+
 
   #Testing LIST
   print("Testing LIST")
